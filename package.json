@@ -1,0 +1,25 @@
+{
+  "name": "camelbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/camigthompson/CamelBot.git"
+  },
+  "author": "Camila Thompson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/camigthompson/CamelBot/issues"
+  },
+  "homepage": "https://github.com/camigthompson/CamelBot#readme",
+  "dependencies": {
+    "@discordjs/builders": "^0.11.0",
+    "@discordjs/rest": "^0.2.0-canary.0",
+    "discord-api-types": "^0.26.1",
+    "discord.js": "^13.5.0"
+  }
+}
