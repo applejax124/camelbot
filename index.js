@@ -7,13 +7,14 @@ const fs = require('fs');
 const { Client, Collection, Intents } = require('discord.js');
 
 // require the bot token from config.json
-const { token } = require('./config.json');
+const { prefix, token } = require('./config.json');
 
 // create a new client
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
 // command handling
 client.commands = new Collection();
+client.prefix = prefix;
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
