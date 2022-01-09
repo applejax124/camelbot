@@ -1,34 +1,47 @@
 // CamelBot index.js
 // Camila Thompson
 
+const fs = require('fs');
+
 // require the discord.js classes
-const Discord = require('discord.js');
+const { Client, Collection, Intents } = require('discord.js');
 
 // require the bot token from config.json
-const config = require('./config.json');
+const { token } = require('./config.json');
 
 // create a new client
-const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+
+client.commands = new.Collection();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js')); //retrieve command names from files in commands dir
+
+// get command names
+for (const file of commandFiles) {
+    const command = require(`./commands/${file}`);
+    client.commands.set(command.data.name, command);
+}
 
 // connect to the discord server
 client.once('ready', () => {
-  console.log('Ready!');
+    console.log('Ready!');
 });
 
 // Listen for commands
 client.on('interactionCreate', async interaction => {
-  if (!interaction.isCommand()) return;
+    if (!interaction.isCommand()) return;
 
-  const { commandName } = interaction;
+    const command = client.commands.get(interaction.commandName);
 
-  if (commandName === 'camelbot'){
-      await interaction.reply('Hi! I am CamelBot and I am a good bot. Nice to meet you!');
-  } else if (commandName === 'server') {
-      await interaction.reply(`Server name: ${interaction.guild.name}\nMembers: ${interaction.guild.memberCount}`);
-  } else if (commandName === 'user') {
-      await interaction.reply(`Your nick: ${interaction.user.username}\nYour tag: ${interaction.user.tag}`);
-  }
+    if(!command) return;
+
+    try {
+        await command.execute(interaction);
+    } catch (error) {
+        console.error(error);
+        await interaction.reply({ content: 'ERROR: could not execute command.', ephemeral: true });
+    }
+
 });
 
 // login to the discord server
-client.login(config.token);
+client.login(token);
