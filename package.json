@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/camigthompson/CamelBot#readme",
   "dependencies": {
-    "@sapphire/framework": "latest",
+    "@sapphire/framework": "^2.3.0",
     "discord.js": "^13.6.0"
   }
 }
