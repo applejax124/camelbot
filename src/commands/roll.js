@@ -13,14 +13,36 @@ class RollCommand extends Command {
     }
 
     async messageRun(message) {
-        let text = message.content;
 
-        //TODO: split string into number of dice and type of dice
+        const array = message.content.split(" ");
 
-        //TODO: generate random number in dice range
+        //error handling
+        if (array.length != 2) {
+            const msg = await message.channel.send("Sorry, I couldn't parse your command. \nUsage: !roll <number of dice>d<type of dice> \nExample: !roll 2d10");
+            return msg;
+        }
 
-        //TODO: return all of the generated numbers
+        //split string into number of dice and type of dice
+        let [number,dice] = array[1].split("d");
+        //TODO: add error checking 
+        number = parseInt(number);
+        dice = parseInt(dice);
 
+        //generate random number in dice range
+        let dice_array = [];
+        for (let i = 0; i < number; i++){
+            let random = Math.floor((Math.random() * dice) + 1);
+            dice_array.push(random);
+        }
+
+        //return all of the generated numbers
+        const reducer = (prev_val, curr_val) => prev_val + curr_val;
+
+        let string = dice_array.toString().replace(/,/g , " ");
+        let sum = dice_array.reduce(reducer);
+
+        const msg = await message.channel.send(`${string} (sum: ${sum})`);
+        return msg;
     }
 
 }
